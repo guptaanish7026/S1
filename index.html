@@ -27,7 +27,7 @@
   <meta name="twitter:image" content="images/S1.png">
   
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <!--  CONFIGURATION — EASY TO EDIT                                 -->
+  <!--  CONFIGURATION — LOADED FROM JSON                              -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <script>
     // Embedded fallback icons (SVG data URIs) — only used if images fail to load
@@ -37,61 +37,37 @@
       logo2: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='15' fill='%23f97316'/%3E%3Ctext x='50' y='70' font-family='system-ui' font-weight='800' font-size='48' fill='white' text-anchor='middle'%3EPW%3C/text%3E%3C/svg%3E"
     };
 
-    window.StudyOneConfig = {
-      siteName: "Study One",
-      siteLogo: "images/S1.png",            // primary logo path
-      communityUrl: "https://t.me/StudyOne",
-      announcement: {
-        enabled: false,
-        text: "✨ Physics Wallah (PW) under maintenance · Next Toppers fully available · PW free & Next Topper free access on Study One!",
-        backgroundColor: "#eef2ff",
-        textColor: "#1e40af",
-        speed: 20
-      },
-      downloadApk: {
-        enabled: false,
-        url: "https://example.com/app.apk",
-        text: "📱 Download APK"
-      },
-      apps: [
-        {
-          name: "Next Toppers",
-          description: "Premium JEE/NEET courses — Next Topper free, Next Topper mod, all batches unlocked. High-quality video lectures on Study One.",
-          icon: "images/logo_1.png",         // primary icon path
-          url: "https://nt.example.com",
-          maintenance: false,
-          show: true,
-          badgeText: "Live · Free access"
-        },
-        {
-          name: "Physics Wallah",
-          description: "India's most loved ed-tech. PW free, PW mod, PW all batches free — IIT JEE, NEET, and board prep by PW's star educators. Only on Study One.",
-          icon: "images/logo_2.png",         // primary icon path
-          url: "https://pw.example.com",
-          maintenance: false,
-          show: true,
-          badgeText: "Maintenance"
-        },
-        {
-          name: "App Three (hidden)",
-          description: "Future app — not shown yet.",
-          icon: "images/logo_3.png",
-          url: "#",
-          maintenance: false,
-          show: false,
-          badgeText: "Coming soon"
-        },
-        {
-          name: "App Four (hidden)",
-          description: "Another future app.",
-          icon: "images/logo_4.png",
-          url: "#",
-          maintenance: true,
-          show: false,
-          badgeText: "Planned"
+    // URL of your hosted JSON config
+    const CONFIG_URL = "https://raw.githubusercontent.com/guptaanish7026/Apps/refs/heads/main/config.json";
+
+    // Fetch config and then run initialization
+    fetch(CONFIG_URL)
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to load config");
+        return response.json();
+      })
+      .then(config => {
+        window.StudyOneConfig = config;
+        // All initialization code runs after config is ready
+        if (typeof initializeApp === 'function') {
+          initializeApp();
         }
-      ]
-    };
+      })
+      .catch(error => {
+        console.error("Could not load StudyOne config:", error);
+        // Minimal fallback config so the page doesn't break completely
+        window.StudyOneConfig = {
+          siteName: "Study One",
+          siteLogo: "images/S1.png",
+          communityUrl: "https://t.me/StudyOne",
+          announcement: { enabled: false, text: "", backgroundColor: "#eef2ff", textColor: "#1e40af", speed: 20 },
+          downloadApk: { enabled: false, url: "#", text: "📱 Download APK" },
+          apps: []
+        };
+        if (typeof initializeApp === 'function') {
+          initializeApp();
+        }
+      });
   </script>
 
   <link rel="icon" type="image/png" href="images/S1.png">
@@ -354,7 +330,7 @@
 <!-- HEADER -->
 <header class="hdr">
   <a class="brand" href="/">
-    <img id="siteLogoImg" src="images/S1.png" alt="Study One Logo" onerror="this.src=FALLBACK_ICONS.siteLogo">
+    <img id="siteLogoImg" src="images/S1.png" alt="Study One Logo" onerror="this.onerror=null;this.src=FALLBACK_ICONS.siteLogo">
     <span class="brand-text">Study <span>One</span></span>
   </a>
   <nav class="nav" id="desknav">
@@ -450,17 +426,17 @@
       <div class="fcard rv"><div class="ficon">🎓</div><div class="ft">Always free</div><div class="fd">PW free, Next Topper free — no subscriptions, ever. Study One is forever free.</div></div>
       <div class="fcard rv"><div class="ficon">⚡</div><div class="ft">Instant access</div><div class="fd">Start watching PW all batches free immediately on Study One.</div></div>
       <div class="fcard rv"><div class="ficon">📱</div><div class="ft">Mobile optimized</div><div class="fd">Learn on any device — PW mod & Next Topper mod ready.</div></div>
-      <div class="fcard rv"><div class="ficon">🔄</div><div class="ft">Weekly updates</div><div class="fd">New batches added every week. Stay tuned with Study One.</div></div>
-      <div class="fcard rv"><div class="ficon">💬</div><div class="ft">Active community</div><div class="fd">Discuss with peers and get support on Study One.</div></div>
+      <div class="fcard rv"><div class="ficon">📅</div><div class="ft">Weekly updates</div><div class="fd">New batches added every week. Stay tuned with Study One.</div></div>
+      <div class="fcard rv"><div class="ficon">👥</div><div class="ft">Active community</div><div class="fd">Discuss with peers and get support on Study One.</div></div>
       <div class="fcard rv"><div class="ficon">🔍</div><div class="ft">Smart search</div><div class="fd">Find exactly what you need quickly on Study One.</div></div>
     </div>
   </div>
 </div>
 
 <!-- CTA -->
-<div class="cta-block rv" id="community">
-  <h2 class="section-title" style="margin-bottom: 20px;">Ready to level up with Study One?</h2>
-  <p class="section-desc" style="margin: 0 auto 36px;">Join thousands of learners using Study One for free premium courses.</p>
+<div class="cta-block rv">
+  <h2 class="section-title" style="margin-bottom:24px;">Ready to level up with Study One?</h2>
+  <p style="font-size:16px;color:var(--text-secondary);margin-bottom:36px;">Join thousands of learners using Study One for free premium courses.</p>
   <div class="hbtns">
     <a class="btn-primary" href="#apps">🚀 Explore apps</a>
     <a class="btn-secondary" href="#" id="ctaCommunityBtn">💬 Join Community</a>
@@ -471,193 +447,166 @@
 <footer class="footer">
   <div class="ftop">
     <div class="fbrand">
-      <span class="brand-text">Study <span style="color:var(--primary);">One</span></span>
+      <div class="brand-text">Study <span>One</span></div>
       <p>Free premium education — PW free, Next Topper free, and more. Built for students by Study One.</p>
     </div>
-    <div class="fcol"><h4>Apps</h4><ul><li><a href="#">Next Toppers free</a></li><li><a href="#">Physics Wallah free</a></li></ul></div>
-    <div class="fcol"><h4>Resources</h4><ul><li><a href="#">PW mod guide</a></li><li><a href="#">Next Topper mod</a></li></ul></div>
-    <div class="fcol"><h4>Connect</h4><ul><li><a href="#" id="footerTelegram">Telegram</a></li><li><a href="#">Twitter</a></li></ul></div>
+    <div class="fcol">
+      <h4>Apps</h4>
+      <ul>
+        <li><a href="#">Next Toppers free</a></li>
+        <li><a href="#">Physics Wallah free</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">PW mod guide</a></li>
+        <li><a href="#">Next Topper mod</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#" id="footerTelegram">Telegram</a></li>
+        <li><a href="#">Twitter</a></li>
+      </ul>
+    </div>
   </div>
   <div class="fbot">
-    <p>© 2025 Study One · PW free & Next Topper free</p>
-    <p>Made with <span class="heart">❤️</span> for students</p>
+    <span>© 2025 Study One · PW free & Next Topper free</span>
+    <span>Made with <span class="heart">❤️</span> for students</span>
   </div>
 </footer>
 
 <script>
-  // Expose fallback icons globally for onerror handlers
-  window.FALLBACK_ICONS = FALLBACK_ICONS;
+  // ========== INITIALIZATION LOGIC ==========
+  // This function runs AFTER the config has been fetched and stored in window.StudyOneConfig
+  function initializeApp() {
+    const cfg = window.StudyOneConfig;
 
-  (function() {
-    function initialize() {
-      const cfg = window.StudyOneConfig || {};
-      
-      // Announcement
-      const ann = cfg.announcement || {};
-      const annContainer = document.getElementById('announcementContainer');
-      if (ann.enabled) {
-        annContainer.innerHTML = `
-          <div class="announcement-marquee" style="--announce-bg: ${ann.backgroundColor || '#eef2ff'}; --announce-text: ${ann.textColor || '#1e40af'}; --announce-speed: ${ann.speed || 20}s;">
-            <div class="marquee-content"><span>${ann.text || ''}</span></div>
-          </div>
-        `;
-      } else {
-        annContainer.style.display = 'none';
-      }
-      
-      // Community URL
-      const communityUrl = cfg.communityUrl || 'https://t.me/StudyOne';
-      ['communityBtn', 'heroCommunityBtn', 'ctaCommunityBtn', 'drawerCommunity', 'footerTelegram'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.href = communityUrl;
-      });
-      
-      // APK button
-      const apkCfg = cfg.downloadApk || {};
-      if (apkCfg.enabled) {
-        const apkBtn = document.getElementById('apkBtn');
-        const drawerApk = document.getElementById('drawerApk');
-        if (apkBtn) { apkBtn.style.display = 'inline-flex'; apkBtn.href = apkCfg.url || '#'; apkBtn.textContent = apkCfg.text || '📱 Download APK'; }
-        if (drawerApk) { drawerApk.style.display = 'flex'; drawerApk.href = apkCfg.url || '#'; drawerApk.textContent = apkCfg.text || '📱 Download APK'; }
-      }
-      
-      // Site logo (already handled by onerror, but ensure src)
-      const logoImg = document.getElementById('siteLogoImg');
-      if (logoImg) logoImg.src = cfg.siteLogo || 'images/S1.png';
-      
-      // Render apps
-      const apps = cfg.apps || [];
-      const grid = document.getElementById('appsGrid');
-      if (grid) {
-        grid.innerHTML = '';
-        const visibleApps = apps.filter(app => app.show);
-        if (visibleApps.length === 0) {
-          grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">No apps available</div>';
-        } else {
-          visibleApps.forEach(app => {
-            const isMaintenance = app.maintenance === true;
-            const card = document.createElement(isMaintenance ? 'div' : 'a');
-            if (!isMaintenance) {
-              card.href = app.url || '#';
-              card.target = '_blank';
-              card.rel = 'noopener';
-            }
-            card.className = `acard rv ${isMaintenance ? 'maintenance-card' : ''}`;
-            
-            const logoDiv = document.createElement('div');
-            logoDiv.className = 'alogo';
-            const img = document.createElement('img');
-            img.src = app.icon;
-            img.alt = app.name;
-            img.onerror = function() {
-              // Use appropriate fallback based on app name or default
-              const fallbackSrc = app.name.includes('Next') ? FALLBACK_ICONS.logo1 : 
-                                 app.name.includes('Physics') ? FALLBACK_ICONS.logo2 : 
-                                 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' rx=\'15\' fill=\'%23999\'/%3E%3Ctext x=\'50\' y=\'70\' font-size=\'40\' fill=\'white\' text-anchor=\'middle\'%3E?%3C/text%3E%3C/svg%3E';
-              this.src = fallbackSrc;
-              this.onerror = null; // prevent infinite loop
-            };
-            logoDiv.appendChild(img);
-            card.appendChild(logoDiv);
-            
-            const nameDiv = document.createElement('div');
-            nameDiv.className = 'aname';
-            nameDiv.innerHTML = `${app.name} ${isMaintenance ? '<span style="font-size:13px; background:#f1f5f9; padding:2px 8px; border-radius:40px; color:#64748b; margin-left:6px;">⚙️ maint.</span>' : ''}`;
-            card.appendChild(nameDiv);
-            
-            const descDiv = document.createElement('div');
-            descDiv.className = 'adesc';
-            descDiv.textContent = app.description;
-            card.appendChild(descDiv);
-            
-            const badgeDiv = document.createElement('div');
-            badgeDiv.className = `atag ${isMaintenance ? 'tag-warning' : 'tag-success'}`;
-            badgeDiv.innerHTML = `<span class="pulse-dot" style="background:${isMaintenance ? '#f59e0b' : '#10b981'};"></span> ${app.badgeText || (isMaintenance ? 'Maintenance' : 'Available')}`;
-            card.appendChild(badgeDiv);
-            
-            if (isMaintenance) {
-              const overlay = document.createElement('div');
-              overlay.className = 'maintenance-overlay';
-              card.appendChild(overlay);
-            }
-            
-            grid.appendChild(card);
-          });
-        }
-      }
-      
-      // Manifest
-      const manifestBlob = new Blob([JSON.stringify({
-        name: "Study One", short_name: "StudyOne", start_url: "/", display: "standalone",
-        background_color: "#ffffff", theme_color: "#2563eb",
-        icons: [{ src: "images/S1.png", sizes: "192x192", type: "image/png" }]
-      })], { type: 'application/manifest+json' });
-      document.getElementById('manifest-placeholder').setAttribute('href', URL.createObjectURL(manifestBlob));
-      
-      // Reveal observer
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((e, i) => {
-          if (e.isIntersecting) {
-            setTimeout(() => e.target.classList.add('on'), i * 60);
-            revealObserver.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
-      
-      // Active nav
-      const sections = [
-        { id: 'home', dn: 'nav-home', dd: 'd-home' },
-        { id: 'apps', dn: 'nav-apps', dd: 'd-apps' },
-        { id: 'features', dn: 'nav-feat', dd: 'd-feat' }
-      ];
-      const navObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const sec = sections.find(s => s.id === e.target.id);
-            if (!sec) return;
-            sections.forEach(s => {
-              document.getElementById(s.dn)?.classList.remove('active');
-              document.getElementById(s.dd)?.classList.remove('active');
-            });
-            document.getElementById(sec.dn)?.classList.add('active');
-            document.getElementById(sec.dd)?.classList.add('active');
-          }
-        });
-      }, { threshold: 0.4 });
-      
-      // Drawer
-      const ham = document.getElementById('ham');
-      const drawer = document.getElementById('drawer');
-      if (ham && drawer) {
-        ham.onclick = () => drawer.classList.toggle('open');
-        window.closeDrawer = () => drawer.classList.remove('open');
-        document.addEventListener('click', (e) => {
-          if (!ham.contains(e.target) && !drawer.contains(e.target)) drawer.classList.remove('open');
-        });
-      }
-      
-      // Protection
-      ["contextmenu", "selectstart", "dragstart", "copy"].forEach(ev => document.addEventListener(ev, e => e.preventDefault()));
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) || (e.ctrlKey && ["U", "S"].includes(e.key))) {
-          e.preventDefault();
-        }
-      });
-      
-      // Start observers
-      sections.forEach(s => { const el = document.getElementById(s.id); if (el) navObs.observe(el); });
-      document.querySelectorAll('.rv').forEach(el => revealObserver.observe(el));
-      setTimeout(() => {
-        document.querySelectorAll('.rv').forEach(el => { if (!el.classList.contains('on')) revealObserver.observe(el); });
-      }, 200);
+    // Update site logo
+    const siteLogoImg = document.getElementById('siteLogoImg');
+    if (siteLogoImg && cfg.siteLogo) {
+      siteLogoImg.src = cfg.siteLogo;
+      siteLogoImg.onerror = function() {
+        this.onerror = null;
+        this.src = FALLBACK_ICONS.siteLogo;
+      };
     }
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initialize);
+
+    // Update site name in header
+    const brandText = document.querySelector('.brand-text');
+    if (brandText) {
+      brandText.innerHTML = cfg.siteName ? cfg.siteName.replace('Study', 'Study <span>') + '</span>' : 'Study <span>One</span>';
+    }
+
+    // Announcement marquee
+    const announcementContainer = document.getElementById('announcementContainer');
+    if (cfg.announcement && cfg.announcement.enabled && cfg.announcement.text) {
+      const speed = cfg.announcement.speed || 20;
+      const bg = cfg.announcement.backgroundColor || '#eef2ff';
+      const color = cfg.announcement.textColor || '#1e40af';
+      announcementContainer.innerHTML = `
+        <div class="announcement-marquee" style="background: ${bg}; color: ${color}; --announce-speed: ${speed}s;">
+          <div class="marquee-content"><span>${cfg.announcement.text}</span><span>${cfg.announcement.text}</span></div>
+        </div>
+      `;
     } else {
-      initialize();
+      announcementContainer.style.display = 'none';
     }
-  })();
+
+    // Community URL (set all buttons and links)
+    const communityUrl = cfg.communityUrl || 'https://t.me/StudyOne';
+    document.getElementById('communityBtn').href = communityUrl;
+    document.getElementById('heroCommunityBtn').href = communityUrl;
+    document.getElementById('drawerCommunity').href = communityUrl;
+    document.getElementById('ctaCommunityBtn').href = communityUrl;
+    document.getElementById('footerTelegram').href = communityUrl;
+
+    // Download APK button
+    const apkBtn = document.getElementById('apkBtn');
+    const drawerApk = document.getElementById('drawerApk');
+    if (cfg.downloadApk && cfg.downloadApk.enabled) {
+      apkBtn.style.display = 'inline-flex';
+      apkBtn.href = cfg.downloadApk.url;
+      apkBtn.textContent = cfg.downloadApk.text || '📱 Download APK';
+      if (drawerApk) {
+        drawerApk.style.display = 'block';
+        drawerApk.href = cfg.downloadApk.url;
+        drawerApk.textContent = cfg.downloadApk.text || '📱 Download APK';
+      }
+    } else {
+      apkBtn.style.display = 'none';
+      if (drawerApk) drawerApk.style.display = 'none';
+    }
+
+    // Apps grid
+    const appsGrid = document.getElementById('appsGrid');
+    appsGrid.innerHTML = ''; // clear loading message
+    const visibleApps = cfg.apps ? cfg.apps.filter(app => app.show !== false) : [];
+    if (visibleApps.length === 0) {
+      appsGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">No apps available right now.</div>';
+      return;
+    }
+
+    visibleApps.forEach(app => {
+      const isMaintenance = app.maintenance;
+      const card = document.createElement('div');
+      card.className = 'acard' + (isMaintenance ? ' maintenance-card' : '');
+
+      // Fallback icon key
+      let fallbackIcon = FALLBACK_ICONS.logo1;
+      if (app.name && app.name.toLowerCase().includes('physics wallah')) {
+        fallbackIcon = FALLBACK_ICONS.logo2;
+      } else if (app.name && app.name.toLowerCase().includes('next toppers')) {
+        fallbackIcon = FALLBACK_ICONS.logo1;
+      }
+
+      card.innerHTML = `
+        ${isMaintenance ? '<div class="maintenance-overlay"></div>' : ''}
+        <div class="alogo">
+          <img src="${app.icon}" alt="${app.name}" onerror="this.onerror=null;this.src='${fallbackIcon}';">
+        </div>
+        <div class="aname">
+          ${app.name}
+          ${app.badgeText ? `<span class="atag ${isMaintenance ? 'tag-warning' : 'tag-success'}">${app.badgeText}</span>` : ''}
+        </div>
+        <div class="adesc">${app.description}</div>
+      `;
+
+      if (!isMaintenance) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          window.open(app.url, '_blank');
+        });
+      }
+
+      appsGrid.appendChild(card);
+    });
+
+    // Reveal animations (if any elements with .rv exist)
+    const revealElements = document.querySelectorAll('.rv');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('on');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => observer.observe(el));
+
+    // Mobile menu toggle
+    const ham = document.getElementById('ham');
+    const drawer = document.getElementById('drawer');
+    if (ham && drawer) {
+      ham.addEventListener('click', () => {
+        drawer.classList.toggle('open');
+      });
+    }
+  }
+
+  // The fetch script at the top will call initializeApp() when config is ready.
 </script>
 </body>
 </html>
